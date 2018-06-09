@@ -1,0 +1,37 @@
+[
+    {
+        "name": "phpcmx/common",
+        "version": "1.0.3",
+        "version_normalized": "1.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phpcmx/common.git",
+            "reference": "316f0b9f6f9097bbb65ffbf3c0ce0a8732eccd4b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/phpcmx/common/316f0b9f6f9097bbb65ffbf3c0ce0a8732eccd4b.zip",
+            "reference": "316f0b9f6f9097bbb65ffbf3c0ce0a8732eccd4b",
+            "shasum": ""
+        },
+        "time": "2018-05-04T10:13:35+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "phpcmx\\common\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "一些快捷常用类库",
+        "keywords": [
+            "common",
+            "lib",
+            "phpcmx",
+            "phpcmx common"
+        ]
+    }
+]

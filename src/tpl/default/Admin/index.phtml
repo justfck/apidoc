@@ -1,0 +1,33 @@
+<?php
+use JustFck\ApiDoc\dict\Tpl;
+use JustFck\ApiDoc\lib\url\Url;
+
+/** @var $jsonList array */
+?>
+<html>
+<head>
+    <title>版本列表 -- <?=Tpl::SUFFIX?></title>
+</head>
+<body>
+<h1>版本列表</h1>
+<a href="<?=Url::init()->make('create')?>">创建新版本</a>
+<p>点击查看详情</p>
+<ul>
+    <?php
+    foreach ($jsonList as $index => $item) {
+        ?>
+      <li>
+        <a href="<?=Url::init()->make('detail', ['version'=>$item['version']])?>">
+            <?=$item['version']?>
+        </a>
+        <br>
+        <small>
+          <?=$item['description']?>
+        </small>
+      </li>
+        <?php
+    }
+    ?>
+</ul>
+</body>
+</html>

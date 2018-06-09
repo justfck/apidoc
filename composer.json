@@ -1,0 +1,18 @@
+{
+    "name": "justfck/apidoc",
+    "license": "MIT",
+    "require": {
+        "phpcmx/common": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JustFck\\ApiDoc\\": "src/"
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

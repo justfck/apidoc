@@ -1,0 +1,20 @@
+<?php
+
+use JustFck\ApiDoc\dict\Tpl;
+use JustFck\ApiDoc\lib\url\Url;
+
+?>
+<html>
+<head>
+    <title>修改描述 -- <?=Tpl::SUFFIX?></title>
+    <link href="./static/default/style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h1>修改描述</h1>
+<a href="<?=Url::init()->make('index')?>">返回首页</a>
+<?php
+$is_new = false;
+include __DIR__."/page/form.phtml";
+?>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<?php
+use JustFck\ApiDoc\dict\Tpl;
+use JustFck\ApiDoc\lib\url\Url;
+
+/** @var $json array */
+?>
+<html>
+<head>
+    <title>版本号：<?=$json['version']?> -- <?=Tpl::SUFFIX?></title>
+</head>
+<body>
+<h1>版本号：<?=$json['version']?></h1>
+<a href="<?=Url::init()->make('index')?>">返回首页</a>
+<a href="<?=Url::init()->make('update', ['version' => $json['version']])?>">修改描述</a>
+<a href="<?=Url::init()->make('addApi', ['version' => $json['version']])?>">添加api</a>
+<div>
+  描述：<?=$json['description']?>
+</div>
+</body>
+</html>

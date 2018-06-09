@@ -1,0 +1,15 @@
+<?php
+use JustFck\ApiDoc\dict\Tpl;
+use JustFck\ApiDoc\lib\url\Url;
+
+?><html>
+<head>
+   <title>登录-<?=Tpl::SUFFIX?></title>
+</head>
+<body>
+<form action="<?=Url::init()->make('login')?>" method="post">
+  请输入密码：<input name="password" type="password">
+  <input type="submit" value="提交">
+</form>
+</body>
+</html>

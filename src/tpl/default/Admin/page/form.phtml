@@ -1,0 +1,30 @@
+<?php
+
+use JustFck\ApiDoc\lib\url\Url;
+
+/** @var $form array */
+/** @var $is_new bool */
+?>
+<form action="<?=Url::init()->make($is_new?'create':'update', $is_new?[]:['version'=>$form['version']])?>" method="post">
+    <?php
+    if ($is_new) {
+        ?>
+      <div>
+        <label>
+          版本号：
+          <input name="version" value="<?=$form['version']?>">
+        </label>
+      </div>
+        <?php
+    }
+    ?>
+  <div>
+    <label>
+      描述：
+      <textarea name="description" cols="100" rows="10"><?=$form['description']?></textarea>
+    </label>
+  </div>
+  <div>
+    <input class="btn" type="submit" value="<?=$is_new?'创建':"修改"?>">
+  </div>
+</form>
