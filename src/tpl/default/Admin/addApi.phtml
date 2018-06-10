@@ -1,0 +1,167 @@
+<?php
+
+use JustFck\ApiDoc\dict\Tpl;
+use JustFck\ApiDoc\lib\url\Url;
+
+/** @var $json array */
+/** @var $api array */
+?>
+<html>
+<head>
+    <title>添加接口 -- <?= Tpl::SUFFIX?></title>
+    <link href="./static/default/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<h1>添加接口 </h1>
+<p>版本号：<?=$json['version']?></p>
+<p>版本描述：<?=$json['description']?></p>
+<form action="<?=Url::init()->make('addApi', ['version'=>$json['version']])?>" method="post">
+    <div><label>
+            <span class="input-span">接口标识（英文唯一）*：</span><input name="id" value="<?=$api['id']?>">
+        </label>
+    </div>
+    <div><label>
+            <span class="input-span">接口名称*：</span><input name="name" value="<?=$api['name']?>">
+        </label>
+    </div>
+    <div><label>
+            <span class="input-span">接口描述（可选）：</span><textarea name="description"><?=$api['description']?></textarea>
+        </label>
+    </div>
+    <div><label>
+            <span class="input-span">接口地址（带http://）*：</span><input name="url" value="<?=$api['url']?>">
+        </label>
+    </div>
+    <div>
+            <span class="input-span">请求方式*：</span>
+                <?php
+                $methodList = ['get', 'post', 'put', 'delete'];
+                foreach ($methodList as $index => $item) {
+                    ?>
+                    <label><input type="radio" name="method" <?=$item==$api['method']?'checked':''?> value="<?=$item?>"><?=$item?></label>
+                    <?php
+                }
+                ?>
+    </div>
+    <div><label>
+            <span class="input-span">body类型</span>
+                <?php
+                $typeList = ['kv', 'json', 'raw'];
+                foreach ($typeList as $index => $item) {
+                    ?>
+                    <label><input type="radio" name="body" <?=$item==$api['body']?'checked':''?> value="<?=$item?>"><?=$item?></label>
+                    <?php
+                }
+                ?>
+        </label>
+    </div>
+    <div><small>温馨提示：get和delete没有body</small></div>
+    <div>
+        <label>
+            url参数：（固定参数写url里，可变参数写这里）
+        </label>
+        <table id="tGet" border="1">
+            <thead>
+            <tr>
+                <th>参数</th><th>类型</th><th>是否必须</th><th>说明</th><th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="get_body">
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5" style="text-align: center;"><button onclick="addGet();return false;">添加参数</button></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div>
+        <label>
+            body参数：
+        </label>
+        <table id="tBody" border="1">
+            <thead>
+            <tr>
+                <th>参数</th><th>类型</th><th>是否必须</th><th>说明</th><th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="body_body">
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5" style="text-align: center;"><button onclick="addBody();return false;">添加参数</button></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div>
+        <input type="submit" class="btn" value="添加">
+    </div>
+</form>
+<script>
+    function addGet(){
+        var paramType = ['int', 'string', 'float'];
+        var name = window.prompt('请填写参数名');
+        if (name === null){
+            return;
+        }
+        var type = window.prompt("请填写字段类型.\nps：请勿点阻止此页面创建更多对话框\n"+paramType.join());
+        if (type === null){
+            return ;
+        }
+        while (-1 === paramType.indexOf(type)){
+            type = window.prompt('参数类型'+type+'仅接受类型:'+paramType.join());
+        }
+        var need = window.confirm('参数是否必须?');
+
+        addNewGet(name, type, need);
+    }
+
+    function addNewGet(name, type, need){
+        var tbody = document.getElementById('get_body');
+        var tr = tplTr('apiget', name, type, need, '');
+        tbody.innerHTML = tbody.innerHTML + tr;
+    }
+
+    function addBody(){
+        var paramType = ['int', 'string', 'float', 'object'];
+        var name = window.prompt('请填写参数名');
+        if (name === null){
+            return;
+        }
+        var type = window.prompt("请填写字段类型.\nps：请勿点阻止此页面创建更多对话框\n"+paramType.join());
+        if (type === null){
+            return ;
+        }
+        while (-1 === paramType.indexOf(type)){
+            type = window.prompt('参数类型'+type+'仅接受类型:'+paramType.join());
+        }
+        var need = window.confirm('参数是否必须?');
+
+        addNewBody(name, type, need);
+    }
+
+    function addNewBody(name, type, need){
+        var tbody = document.getElementById('body_body');
+        var tr = tplTr('apibody', name, type, need, '');
+        tbody.innerHTML = tbody.innerHTML + tr;
+    }
+
+    function tplTr(key, name, type, need, description){
+        var time = (new Date).getTime();
+        return "<tr id='tr_" + time + "'>" +
+            "<td><input class='table-input' name='"+key+"[" + time + "][name]' value='" + name + "'></td>" +
+            "<td><input class='table-input' name='"+key+"[" + time + "][type]' value='" + type + "'></td>" +
+            "<td><input class='table-input' name='"+key+"[" + time + "][need]' value='" + (0 + need) + "'></td>" +
+            "<td><textarea class='table-input' name='"+key+"[" + time + "][description]'>" + description + "</textarea></td>" +
+            "<td><a href='javascript:delTr(\"tr_" + time + "\");'>删除</a></td>" +
+            "</tr>";
+    }
+
+    function delTr(id){
+        var m = document.getElementById(id);
+        m.parentNode.removeChild(m);
+    }
+</script>
+</body>
+</html>

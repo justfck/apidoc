@@ -1,4 +1,5 @@
 <?php
+
 use JustFck\ApiDoc\dict\Tpl;
 use JustFck\ApiDoc\lib\url\Url;
 
@@ -6,7 +7,7 @@ use JustFck\ApiDoc\lib\url\Url;
 ?>
 <html>
 <head>
-    <title>版本号：<?=$json['version']?> -- <?=Tpl::SUFFIX?></title>
+  <title>版本号：<?=$json['version']?> -- <?=Tpl::SUFFIX?></title>
 </head>
 <body>
 <h1>版本号：<?=$json['version']?></h1>
@@ -15,6 +16,27 @@ use JustFck\ApiDoc\lib\url\Url;
 <a href="<?=Url::init()->make('addApi', ['version' => $json['version']])?>">添加api</a>
 <div>
   描述：<?=$json['description']?>
+</div>
+<div>
+    <?php
+    foreach ($json['apiList'] as $i => $api) {
+        ?>
+      <div>
+        <h2><?=$api['name']?>(<?=$api['id']?>)</h2>
+        <div>
+          <h3>描述</h3>
+          <small><?=$api['description']?></small>
+        </div>
+        <div>
+          <h3>请求地址</h3>
+          <small><?="{$api['method']} {$api['url']}"?></small>
+        </div>
+      </div>
+        <?php
+    }
+    echo "<pre>";
+    var_dump($json['apiList']);
+    ?>
 </div>
 </body>
 </html>

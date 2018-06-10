@@ -8,7 +8,7 @@
 
 namespace JustFck\ApiDoc\model;
 
-class Json {
+class Json extends BaseEntity {
     private $version = '';
     private $description = '';
     /**
@@ -46,6 +46,15 @@ class Json {
         return $this;
     }
 
+    /**
+     * @param Api $api
+     * @return Json
+     */
+    public function addApi(Api $api) {
+        $this->apiList[] = $api;
+        return $this;
+    }
+
     public function done($is_array=0) {
         $data = [
             'version' => $this->version,
@@ -66,5 +75,18 @@ class Json {
             $data[] = $item->done(1);
         }
         return $data;
+    }
+
+
+    public static function formatFromArr($jsonArr) {
+        $apiList = [];
+        foreach ($jsonArr['apiList'] as $index => $item) {
+            $apiList[] = Api::formatFromArr($item);
+        }
+
+        return (new self())
+            ->setVersion($jsonArr['version'])
+            ->setDescription($jsonArr['description'])
+            ->setApiList($apiList);
     }
 }

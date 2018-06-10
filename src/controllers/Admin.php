@@ -10,7 +10,9 @@ namespace JustFck\ApiDoc\controllers;
 
 use JustFck\ApiDoc\base\Controller;
 use JustFck\ApiDoc\lib\url\Url;
+use JustFck\ApiDoc\model\Api;
 use JustFck\ApiDoc\model\Json;
+use JustFck\ApiDoc\model\Param;
 use JustFck\ApiDoc\service\AdminService;
 use JustFck\ApiDoc\service\DataService;
 
@@ -94,6 +96,9 @@ class Admin extends Controller {
         ]);
     }
 
+    /**
+     * api详情页面
+     */
     public function detailAction() {
         if (empty($_GET['version'])){
             die('no version param');
@@ -104,6 +109,9 @@ class Admin extends Controller {
         $this->assign('json', $json);
     }
 
+    /**
+     * 更新接口描述信息
+     */
     public function updateAction(){
         if (empty($_GET['version'])){
             die('no version param');
@@ -120,5 +128,61 @@ class Admin extends Controller {
         }
 
         $this->assign('form', $json);
+    }
+
+    /**
+     * 接口添加
+     */
+    public function addApiAction() {
+        if (!isset($_GET['version'])){
+            die('no param version');
+        }
+        $version = $_GET['version'];
+
+        $jsonArr = DataService::getInstance()->getJson($version);
+
+        if (!empty($_POST)){
+            [
+                'apiget' => $_POST['apiget'] ?? [],
+                'apibody' => $_POST['apibody'] ?? [],
+            ];
+
+            $paramGet = array_map(function($v){
+                return (new Param())
+                    ->setName($v['name'])
+                    ->setType($v['type'])
+                    ->setNeed($v['need'])
+                    ->setDescription($v['description']);
+            }, $_POST['apiget']??[]);
+            $paramBody = array_map(function($v){
+                return (new Param())
+                    ->setName($v['name'])
+                    ->setType($v['type'])
+                    ->setNeed($v['need'])
+                    ->setDescription($v['description']);
+            }, $_POST['apibody']??[]);
+
+
+            $api = (new Api())
+                ->setId($_POST['id'])
+                ->setName($_POST['name'])
+                ->setDescription($_POST['description'])
+                ->setUrl($_POST['url'])
+                ->setMethod($_POST['method'])
+                ->setBody($_POST['body'])
+                ->setParamGet($paramGet)
+                ->setParamBody($paramBody);
+
+            $json = Json::formatFromArr($jsonArr)
+                ->addApi($api);
+
+            DataService::getInstance()->save($json->done(1));
+            header("location:".Url::init()->make('detail', ['version' => $jsonArr['version']]));
+            return;
+        }
+
+        $this->assign('json', $jsonArr);
+        $api = new Api();
+        $this->assign('api', $api->done(1));
     }
 }
